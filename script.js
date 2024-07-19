@@ -3,6 +3,7 @@ let service;
 let autocomplete;
 const places = [];
 const markers = [];
+const apiUrl = 'https://raw.githubusercontent.com/baeowsky/RBMap/main/places.json';
 
 function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
@@ -30,7 +31,6 @@ function initMap() {
         });
     });
 
-    // Map click event
     map.addListener('click', (e) => {
         const name = prompt("Podaj nazwę miejsca:");
         const description = prompt("Podaj opis miejsca (opcjonalnie):");
@@ -128,8 +128,7 @@ function savePlaces() {
 function loadPlaces() {
     const savedPlaces = JSON.parse(localStorage.getItem('places'));
     if (savedPlaces) {
-        places.push(...savedPlaces);
-        places.forEach(place => {
+        savedPlaces.forEach(place => {
             const marker = new google.maps.Marker({
                 position: new google.maps.LatLng(place.latLng.lat, place.latLng.lng),
                 map: map,
@@ -144,6 +143,7 @@ function loadPlaces() {
                 infoWindow.open(map, marker);
             });
 
+            places.push(place);
             markers.push(marker);
         });
         updatePlacesList();
